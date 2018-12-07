@@ -37,7 +37,7 @@ class PSI2 extends Frame implements ActionListener {
 		//frame of output
 		JFrame frame = new JFrame("Webcam Capture");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(600, 600);
+		frame.setSize(700, 600);
 		FacePanel facePanel = new FacePanel();
 		frame.setContentPane(facePanel);
 		
@@ -107,7 +107,7 @@ class PSI2 extends Frame implements ActionListener {
 						changed = updateChanged(changed, connectCompon);
 					}
 					
-					webcam_image = drawPintura(webcam_image);
+					webcam_image = drawPintura(webcam_image, connectCompon);
 				
 					//Update frame of modified image
 					matToBufferedImageConverter.setMatrix(webcam_image, ".jpg");
@@ -313,13 +313,25 @@ class PSI2 extends Frame implements ActionListener {
 	}
 
 	//Metodo que sobrepoe a matriz com as cores pintadas a imagem capturada pela camara
-	private static Mat drawPintura(Mat webcam_image) {
+	private static Mat drawPintura(Mat webcam_image, int[][] connectCompon) {
 		
 		for(int i = 0; i < webcam_image.rows(); i++)
 			for(int j = 0; j < webcam_image.cols(); j++) {
 				double color[] = pintura.get(i, j);
 				if(color[0] != 255 && color[1] != 255 && color[2] != 255) {
-					webcam_image.put(i, j, new double[]{color[2], color[1], color[0]});
+					
+					if(connectCompon[i][j] == 1) {
+						if(i == 0 || j == 0 || i == webcam_image.rows()-1 || j == webcam_image.cols()-1 ) {
+							webcam_image.put(i, j, new double[]{0,0,0});
+						}
+						else if(connectCompon[i-1][j] == 0 || connectCompon[i+1][j] == 0 || connectCompon[i][j-1] == 0 || connectCompon[i][j+1] == 0) {
+							webcam_image.put(i, j, new double[]{0,0,0});
+						}
+						else
+							webcam_image.put(i, j, new double[]{color[2], color[1], color[0]});
+					}
+					else
+						webcam_image.put(i, j, new double[]{color[2], color[1], color[0]});
 				}
 			}
 		

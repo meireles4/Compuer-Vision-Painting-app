@@ -28,8 +28,8 @@ public class FacePanel extends JPanel{
 			return;
 		}
 		g.drawImage(this.image, 10, 10, this.image.getWidth(), this.image.getHeight(), null);
-		g.setFont(new Font("arial", 2,20));
+		/*g.setFont(new Font("arial", 2,20));
 		g.setColor(Color.WHITE);
-		g.drawString("Web cam is processing frame by frame [ Frame: " + (count++) + " ]", 50, 50);
+		g.drawString("Web cam is processing frame by frame [ Frame: " + (count++) + " ]", 50, 50);*/
 	}
 }
